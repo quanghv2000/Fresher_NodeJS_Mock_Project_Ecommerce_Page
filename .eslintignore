@@ -1,0 +1,6 @@
+node_modules/
+dist
+coverage
+scripts
+webpack.server.prod.config.js
+src

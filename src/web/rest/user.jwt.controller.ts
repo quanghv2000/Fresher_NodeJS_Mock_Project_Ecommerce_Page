@@ -55,8 +55,12 @@ export class UserJWTController {
     })
     async refreshToken(@Req() req: Request, @Res() res: Response): Promise<any> {
         const refreshTokenReq = req.headers.authorization.split(' ')[1];
-
-        const user = await this.jwtService.verify(refreshTokenReq);
+        let user;
+        try {
+            user = await this.jwtService.verify(refreshTokenReq);
+        } catch (error) {
+            throw new HttpException('Invalid refresh token!', HttpStatus.BAD_REQUEST);
+        }
 
         const payload: Payload = { id: user.id, username: user.login, authorities: user.authorities };
         const refreshTokenFound = await this.cacheManager.get(`refresh_token_${payload.id}`);
@@ -83,7 +87,7 @@ export class UserJWTController {
     async logout(@Req() req: Request, @Res() res: Response): Promise<any> {
         const userReq: any = req.user;
         await this.cacheManager.del(`refresh_token_${userReq.id}`);
-        
+
         return res.json({
             message: 'Logout successfully!',
         });

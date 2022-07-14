@@ -1,5 +1,4 @@
 import { Module, CacheModule } from '@nestjs/common';
-import * as redisStore from 'cache-manager-redis-store';
 import { AuthService } from '../service/auth.service';
 import { UserModule } from '../module/user.module';
 import { PassportModule } from '@nestjs/passport';
@@ -15,11 +14,7 @@ import { AccountController } from '../web/rest/account.controller';
 
 @Module({
     imports: [
-        CacheModule.register({
-            store: redisStore,
-            host: 'localhost',
-            port: 6379,
-        }),
+        CacheModule.register(),
         TypeOrmModule.forFeature([AuthorityRepository]),
         UserModule,
         PassportModule,

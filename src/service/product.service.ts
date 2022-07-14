@@ -1,4 +1,3 @@
-import _ from 'lodash';
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { ProductDTO } from './dto/product.dto';
@@ -99,11 +98,7 @@ export class ProductService {
             where: { id: result.id },
             relations: ['theMedia', 'categories'],
         });
-        return ProductMapper.fromEntityToDTO(productCreated);
-    }
 
-    async findByIds(ids: number[]): Promise<ProductDTO[] | undefined> {
-        const products = await this.productRepository.findByIds(ids);
-        return _.map(products, product => ProductMapper.fromEntityToDTO(product));
+        return ProductMapper.fromEntityToDTO(productCreated);
     }
 }

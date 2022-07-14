@@ -55,23 +55,18 @@ export class UserJWTController {
     })
     async refreshToken(@Req() req: Request, @Res() res: Response): Promise<any> {
         const refreshTokenReq = req.headers.authorization.split(' ')[1];
-        let user;
-        try {
-            user = await this.jwtService.verify(refreshTokenReq);
-        } catch (error) {
-            throw new HttpException('Invalid refresh token!', HttpStatus.BAD_REQUEST);
-        }
-        
-        const payload: Payload = { id: user.id, username: user.login, authorities: user.authorities };
-        
-        const refreshTokenFound = await this.cacheManager.get(`refresh_token_${refreshTokenReq}`);
 
-        if (!refreshTokenFound) {
+        const user = await this.jwtService.verify(refreshTokenReq);
+
+        const payload: Payload = { id: user.id, username: user.login, authorities: user.authorities };
+        const refreshTokenFound = await this.cacheManager.get(`refresh_token_${payload.id}`);
+
+        if (!refreshTokenFound || refreshTokenReq !== refreshTokenFound) {
             throw new HttpException('Invalid refresh token!', HttpStatus.BAD_REQUEST);
         }
 
         const access_token = this.jwtService.sign(payload); // secret and expiresIn has config in auth.module
-        // res.setHeader('Authorization', 'Bearer ' + access_token);
+        res.setHeader('Authorization', 'Bearer ' + access_token);
 
         return res.json({ access_token });
     }
@@ -86,9 +81,8 @@ export class UserJWTController {
         description: 'Logout',
     })
     async logout(@Req() req: Request, @Res() res: Response): Promise<any> {
-        // const userReq: any = req.user;
-        const refreshTokenReq = req.headers.authorization.split(' ')[1];
-        await this.cacheManager.del(`refresh_token_${refreshTokenReq}`);
+        const userReq: any = req.user;
+        await this.cacheManager.del(`refresh_token_${userReq.id}`);
         
         return res.json({
             message: 'Logout successfully!',

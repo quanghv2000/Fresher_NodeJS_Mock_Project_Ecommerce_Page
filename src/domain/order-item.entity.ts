@@ -8,7 +8,7 @@ export class OrderItem extends BaseEntity {
     @ManyToOne(() => Order)
     order: Order;
 
-    @ManyToOne(() => Product)
+    @ManyToOne(() => Order)
     product: Product;
 
     @Column({ nullable: true, type: "float" })

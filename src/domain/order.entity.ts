@@ -1,6 +1,5 @@
-import { Entity, Column, ManyToOne, OneToMany } from 'typeorm';
+import { Entity, Column, ManyToOne } from 'typeorm';
 import { BaseEntity } from './base/base.entity';
-import { OrderItem } from './order-item.entity';
 import { User } from './user.entity';
 
 @Entity('order')
@@ -10,10 +9,4 @@ export class Order extends BaseEntity {
 
     @Column({ nullable: true, type: "float" })
     totalAmount: number;
-
-    @OneToMany(() => OrderItem, orderItem => orderItem.order)
-    orderItem?: OrderItem[];
-
-    @Column({ nullable: true })
-    status: "pending" | "approved" | "rejected" | "canceled"
 }

@@ -1,4 +1,3 @@
-import { OrderItem } from '../../domain/order-item.entity';
 import { Product } from '../../domain/product.entity';
 import { ProductDTO } from '../dto/product.dto';
 
@@ -30,14 +29,6 @@ export class ProductMapper {
             productDTO[field] = product[field];
         });
 
-        return productDTO;
-    }
-
-    static fromOrderItemEntityToDTO(orderItem: OrderItem): ProductDTO {
-        const product = orderItem.product;
-        const productDTO = this.fromEntityToDTO(product);
-        productDTO.price = orderItem.unitPrice;
-        productDTO.quantity = orderItem.quantity;
         return productDTO;
     }
 }

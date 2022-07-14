@@ -45,7 +45,7 @@ export class AuthService {
             expiresIn: 60 * 60 * 24 * 30 * 6,
         });
 
-        await this.cacheManager.set(`refresh_token_${refresh_token}`, payload, { ttl: 60 * 60 * 24 * 30 * 6 });
+        await this.cacheManager.set(`refresh_token_${userFind.id}`, refresh_token, { ttl: 60 * 60 * 24 * 30 * 6 });
 
         /* eslint-disable */
         return {

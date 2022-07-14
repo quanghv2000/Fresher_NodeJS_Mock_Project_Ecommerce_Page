@@ -144,10 +144,7 @@ export class ProductController {
         description: 'The record has been successfully updated.',
         type: ProductDTO,
     })
-    async updateProduct(
-        @Req() req: Request,
-        @UploadedFiles() files,
-    ): Promise<ProductDTO> {
+    async updateProduct(@Req() req: Request, @UploadedFiles() files): Promise<ProductDTO> {
         const productDTO: ProductDTO = JSON.parse(req.body.product);
         const theMediaDTO: MediaDTO[] = [];
 
